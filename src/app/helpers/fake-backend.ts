@@ -2,8 +2,10 @@
 import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
+import { User } from '../models/user';
 
 // array in local storage for registered users
+// @ts-ignore
 let users = JSON.parse(localStorage.getItem('users')) || [];
 
 @Injectable()
@@ -20,10 +22,6 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         function handleRoute() {
             switch (true) {
-                case url.endsWith('/users/authenticate') && method === 'POST':
-                    return authenticate();
-                case url.endsWith('/users/register') && method === 'POST':
-                    return register();
                 case url.endsWith('/users') && method === 'GET':
                     return getUsers();
                 case url.match(/\/users\/\d+$/) && method === 'DELETE':
@@ -31,39 +29,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 default:
                     // pass through any requests not handled above
                     return next.handle(request);
-            }    
-        }
-
-        // route functions
-
-        function authenticate() {
-            const { username, password } = body;
-            const user = users.find(x => x.username === username && x.password === password);
-            if (!user) return error('Username or password is incorrect');
-            return ok({
-                id: user.id,
-                username: user.username,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                token: 'fake-jwt-token'
-            })
-        }
-
-        function register() {
-            const user = body
-
-            if (users.find(x => x.username === user.username)) {
-                return error('Username "' + user.username + '" is already taken')
             }
-
-            user.id = users.length ? Math.max(...users.map(x => x.id)) + 1 : 1;
-            users.push(user);
-            localStorage.setItem('users', JSON.stringify(users));
-
-            return ok();
         }
 
         function getUsers() {
+          console.log('getUsers ');
             if (!isLoggedIn()) return unauthorized();
             return ok(users);
         }
@@ -71,18 +41,18 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         function deleteUser() {
             if (!isLoggedIn()) return unauthorized();
 
-            users = users.filter(x => x.id !== idFromUrl());
+            users = users.filter((x: User ) => x.id !== idFromUrl());
             localStorage.setItem('users', JSON.stringify(users));
             return ok();
         }
 
         // helper functions
 
-        function ok(body?) {
+        function ok(body?: any) {
             return of(new HttpResponse({ status: 200, body }))
         }
 
-        function error(message) {
+        function error(message?: any) {
             return throwError({ error: { message } });
         }
 
