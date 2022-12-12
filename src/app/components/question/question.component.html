@@ -1,0 +1,54 @@
+<div class="container-fluid" *ngIf="showEditQuestionFields">
+  <form [formGroup]="addQuestionForm" (ngSubmit)="onNewQuestionSubmit()">
+    <div class="form-group">
+      <label>Current question:</label>
+      <select formControlName="currentQuestion" (change)="getQuestion()" class="btn">
+        <option *ngFor="let question of questions" value="{{question.id}}">{{question.question}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>{{getQuestionLabel()}}</label>
+      <input type="text" formControlName="questionName"  class="form-control" [ngClass]="{ 'is-invalid': submittedAddQuestionForm && questionName()?.errors }" />
+      <div *ngIf="submittedAddQuestionForm && questionName()?.errors" class="invalid-feedback">
+        <div *ngIf="questionName()?.errors?.['required']">Question name is required</div>
+      </div>
+    </div>
+    <div *ngIf="!yesornoquestion">
+      <label>{{getAnswersLabel()}} </label>
+      <div *ngFor="let item of [].constructor(+noOfOutComes()?.value); let i = index ">
+        <div>
+          <input type="text" formControlName="Field{{i+1}}" class="form-control">
+
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <a [routerLink]="" (click)="backFromQuestions()" class="btn btn-link float-right">Cancel</a>
+    </div>
+    <div class="form-group">
+      <label class="form-control btn ">Simple yes/no-question?</label>
+      <input type="checkbox" (click)="checkBox()" [checked]="false" formControlName="yesorno"   class="form-control btn btn-link"/>
+    </div>
+    <div class="form-group float-right" *ngIf="yesornoquestion">
+      <label>Number of alternatives</label>
+      <select formControlName="noOfOutComes" (change)="apa()" class="form-control">
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button [disabled]="loading" class="btn btn-primary">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        Create question and answers
+      </button>
+    </div>
+  </form>
+</div>
