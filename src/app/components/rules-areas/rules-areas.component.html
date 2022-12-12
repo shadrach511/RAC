@@ -1,1 +1,106 @@
-<p>rules-areas works!</p>
+<div class="container-fluid">
+  <form [formGroup]="createFormRulesArea" (ngSubmit)="onSubmitRulesArea()">
+
+    <div class="container-fluid">
+      <div class="form-group">
+    <button *ngIf="showAddRulesAreaButton" (click)="switchShowCreateRulesAreaButton()" class="btn btn-primary">Create Rules area</button>
+
+    <select *ngIf="showAddRulesAreaButton" formControlName="selectRulesArea" (change)="getRulesAreaVersions()" class="btn  float-right">
+      <option value="-1" [selected]="true">Show all rules areas</option>
+      <option *ngFor="let rulesArea of rulesAreas" value="{{rulesArea.id}}">{{rulesArea.name}}</option>
+    </select>
+      </div>
+      <div class="form-group">
+      <button *ngIf="showAddRulesVersionButton" (click)="switchShowCreateRulesAreaVersionButton()" class="btn btn-primary float-right">Create Rules area version</button>
+        </div>
+    </div>
+  <div class="container-fluid" *ngIf="showAddRulesAreaFields">
+      <div class="form-group">
+        <label>Rules area id</label>
+        <input type="text" formControlName="id" class="form-control" [ngClass]="{ 'is-invalid': submittedRulesArea && id()?.errors }" />
+        <div *ngIf="submittedRulesArea && id()?.errors" class="invalid-feedback">
+          <div *ngIf="id()?.errors?.['required']">Rules area id is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Rules area name</label>
+        <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submittedRulesArea && name()?.errors }" />
+        <div *ngIf="submittedRulesArea && name()?.errors" class="invalid-feedback">
+          <div *ngIf="name()?.errors?.['required']">Rules area name is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Descriptive text</label>
+        <input type="text" formControlName="text" class="form-control"/>
+        </div>
+      <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Create
+        </button>
+        <a [routerLink]="" (click)="switchShowCreateRulesAreaButton()" class="btn btn-link">Cancel</a>
+      </div>
+      </div>
+  </form>
+
+  <form [formGroup]="createFormRulesVersion" (ngSubmit)="onSubmitRulesAreaVersion()">
+
+
+    <div class="container-fluid" *ngIf="showAddRulesVersionFields" >
+      <div class="form-group">
+        <label>Rules area version name for {{selectRulesAreaValue()}}</label>
+        <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submittedRulesVersion && rav_name()?.errors }" />
+        <div *ngIf="submittedRulesVersion && rav_name()?.errors" class="invalid-feedback">
+          <div *ngIf="rav_name()?.errors?.['required']">Rules area version name is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Create
+        </button>
+        <a [routerLink]="" (click)="switchShowCreateRulesAreaVersionButton()" class="btn btn-link">Cancel</a>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="showAddRulesAreaButton" class="container-fluid" >
+    <div class="form-group">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="area_id">
+        <th mat-header-cell *matHeaderCellDef> Rules area id </th>
+        <td mat-cell *matCellDef="let element"> {{element.area_id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="area_name">
+        <th mat-header-cell *matHeaderCellDef> Rules area name </th>
+        <td mat-cell *matCellDef="let element"> {{element.area_name}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="version_name">
+        <th mat-header-cell *matHeaderCellDef> Rules version name </th>
+        <td mat-cell *matCellDef="let element"> {{element.version_name}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="published">
+        <th mat-header-cell *matHeaderCellDef> Rules version published </th>
+        <td mat-cell *matCellDef="let element"> {{element.published}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row (click)="clickedRows(row)" *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    </div>
+  </div>
+
+
+</div>

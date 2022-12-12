@@ -1,5 +1,5 @@
 <div class="container-fluid" *ngIf="showEditQuestionFields">
-  <form [formGroup]="addQuestionForm" (ngSubmit)="onNewQuestionSubmit()">
+  <form [formGroup]="questionForm" (ngSubmit)="onNewQuestionSubmit()">
     <div class="form-group">
       <label>Current question:</label>
       <select formControlName="currentQuestion" (change)="getQuestion()" class="btn">

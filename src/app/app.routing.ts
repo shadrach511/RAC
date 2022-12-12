@@ -5,10 +5,12 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { AuthGuard } from './helpers/auth.guard';
 import { RulesAreasComponent } from './components/rules-areas/rules-areas.component';
+import { RulesVersionComponent } from './components/rules-version/rules-version.component';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'rulesareas', component: RulesAreasComponent, canActivate: [AuthGuard] },
+    { path: 'rulesversion/:rvid/:raid', component: RulesVersionComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
 

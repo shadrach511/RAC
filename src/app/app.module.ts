@@ -11,6 +11,11 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {ErrorInterceptor, fakeBackendProvider, JwtInterceptor } from './helpers';
 import { appRoutingModule } from './app.routing';
 import { RulesAreasComponent } from './components/rules-areas/rules-areas.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { RulesVersionComponent } from './components/rules-version/rules-version.component';
+import { QuestionComponent } from './components/question/question.component';
+
 
 @NgModule({
   declarations: [
@@ -20,6 +25,8 @@ import { RulesAreasComponent } from './components/rules-areas/rules-areas.compon
     HomeComponent,
     RegisterComponent,
     RulesAreasComponent,
+    RulesVersionComponent,
+    QuestionComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,7 +34,9 @@ import { RulesAreasComponent } from './components/rules-areas/rules-areas.compon
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
-    appRoutingModule
+    appRoutingModule,
+    BrowserAnimationsModule,
+    MatTableModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
